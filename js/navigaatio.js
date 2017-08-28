@@ -11,6 +11,13 @@ function NaytaKirjautuminen(){
     });
 }
 
+function NaytaRekisterointi(){
+
+    $("#main").load("views/register.html", function () {
+        alert("Load was performed.");
+    });
+}
+
 function NaytaKalenterit(){
 
     $("#main").load("views/reservation_list.html", function () {
