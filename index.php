@@ -1,3 +1,5 @@
+<?php require_once("config/db.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,7 +14,8 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-4"></div>
-        <div class="col-sm-4" id="main"> <h1> Hello, world!</h1>
+        <div class="col-sm-4" id="main"> <h1> WAAAT!</h1>
+            
         <button type="button" onclick="NaytaKalenterit()" id="varaa" class="btn btn-primary btn-lg">Varaa aikoja</button>
         <button type="button" onclick="NaytaKirjautuminen()"id="katso" class="btn btn-secondary btn-lg">Katso varattuja</button>
         </div>
