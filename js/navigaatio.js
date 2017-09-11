@@ -16,7 +16,7 @@ function NaytaKalenterit(){
 
     $("#main").load("views/reservation_list.html", function () {
         //alert("Load was performed.");
-        console.log("kvaak"); 
+        console.log("ei"); 
     });
 }
  function NaytaEtusivu(){
@@ -24,7 +24,13 @@ function NaytaKalenterit(){
     $("#main").load("views/kirjaudu.html", function () {
         //alert("Load was performed.");
     });
-}      
+}
+function ShowCalendar(){
+
+    $("#main").load("views/reservation_calendar.php", function () {
+        //alert("Load was performed.");
+    });
+}
 var request;
 $("#register-form").submit(function (event) {
     event.preventDefault();

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ReserveTime" data-whatever="@mdo">Open modal for @mdo</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ReserveTime" data-whatever="@fat">Open modal for @fat</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ReserveTime" data-whatever="@getbootstrap">Open modal for @getbootstrap</button>
+
+<div class="modal fade" id="ReserveTime" tabindex="-1" role="dialog" aria-labelledby="ReserveTimeLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ReserveTimeLabel">Varaa aika</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+            <div class="form-group">
+                <div id="alert-time-to-reserve" class="alert alert-success" role="alert">
+                    Varattava aika: kellonaika
+                </div>
+            </div>
+          <div class="form-group">
+            <label for="recipient-name" class="form-control-label">Nimesi</label>
+            <input type="text" class="form-control" id="reserver-name">
+          </div>
+            
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Sulje</button>
+        <button type="button" class="btn btn-primary">Varaa aika</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </body>
+</html>
