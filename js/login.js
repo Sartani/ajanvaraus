@@ -1,38 +1,11 @@
-function NaytaKirjautuminen(){
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
-    $("#main").load("views/kirjaudu.html", function () {
-        //alert("Load was performed.");
-    });
-}
-
-function NaytaRekisterointi(){
-
-    $("#main").load("views/register.html", function () {
-        //alert("Load was performed.");
-    });
-}
-
-function NaytaKalenterit(){
-
-    $("#main").load("views/reservation_list.html", function () {
-        //alert("Load was performed.");
-        console.log("ei"); 
-    });
-}
- function NaytaEtusivu(){
-
-    $("#main").load("views/index.php", function () {
-        //alert("Load was performed.");
-    });
-}
-function ShowCalendar(){
-
-    $("#main").load("views/reservation_calendar.php", function () {
-        //alert("Load was performed.");
-    });
-}
 var request;
-$("#register-form").submit(function (event) {
+$("#login-form").submit(function (event) {
     event.preventDefault();
     if (request) {
         request.abort();
@@ -50,7 +23,13 @@ $("#register-form").submit(function (event) {
     console.log("request: " + request);
     request.done(function (response, textStatus, jqXHR) {
         
-        document.getElementById('register-success').style.display = 'block';
+        //document.getElementById('login-success').style.display = 'block';
+        if (response==="Onnistui"){
+            alert("testi");
+        }
+        if(response==="Epäonnistui"){
+            alert("testi2");
+        }
         
           console.log($form.attr('action'));
           console.log("serializedData:" + serializedData);

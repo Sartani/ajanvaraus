@@ -11,9 +11,16 @@ class calendar {
     
      public function __construct() {
         echo "Ajanvaraus";
-     
-            $this->GenerateCalendar('7','','8','8');
-
+        
+        session_start();
+       
+        if (isset($_SESSION['logged']) AND $_SESSION['logged']=='TRUE') {
+            $this->GenerateCalendar('7', '', '8', '8');
+            #Generoi kalenteri näkymä kirjautuneelle käyttäjälle
+        } else {
+            session_destroy();
+            $this->GenerateCalendar('7', '', '8', '8');
+        }
     }
 
     private function GenerateCalendar($days, $intervals, $HourCount, $HourStart) {

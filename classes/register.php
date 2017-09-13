@@ -23,8 +23,7 @@ class register {
 
     private function registerNewUser() {
         $mysql = new mysql();
-        $db_connection = $mysql->connectDB();
-
+        
         if ($mysql->connectDB()) {
             $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
             $user_name = ($_POST['user_name']);

@@ -1,4 +1,5 @@
 <?php require_once("config/db.php");
+ session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -6,7 +7,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <title> Ajanvaraus</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
   </head>
@@ -14,7 +15,7 @@
     <div class="container">
       <div class="row">
         <div  class="col-sm-2" id="side_left">  <?php include_once ("views/navbar.html") ?></div>
-        <div class="col-sm-8" id="main"> <h1> WAAAT!</h1>
+        <div class="col-sm-8" id="main"> <h1> Ajanvaraus etusivu</h1>
             
         <button type="button" onclick="NaytaKalenterit()" id="varaa" class="btn btn-primary btn-lg">Varaa aikoja</button>
         <button type="button" onclick="NaytaKirjautuminen()"id="katso" class="btn btn-secondary btn-lg">Katso varattuja</button>

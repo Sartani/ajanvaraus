@@ -7,7 +7,7 @@ require_once("../config/db.php");
  * @author Mikko
  */
 class mysql {
-    private $db_connection = null;
+    public $db_connection = null;
     
      public function connectDB() {
         $result = 1;
