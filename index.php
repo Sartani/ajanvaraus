@@ -13,7 +13,7 @@
   <body>
     <div class="container">
       <div class="row">
-        <div  class="col-sm-2" id="side_left"></div>
+        <div  class="col-sm-2" id="side_left">  <?php include_once ("views/navbar.html") ?></div>
         <div class="col-sm-8" id="main"> <h1> WAAAT!</h1>
             
         <button type="button" onclick="NaytaKalenterit()" id="varaa" class="btn btn-primary btn-lg">Varaa aikoja</button>
