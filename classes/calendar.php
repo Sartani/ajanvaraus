@@ -52,7 +52,6 @@ class calendar {
         while ($rowstart < $HourCount) {
             echo'<tr>';
             $tdstart = 0;
-            $echoday = $this->WhichDay($rowstart);
             while ($tdstart < $days) {
                 $echoday = $this->WhichDay($tdstart);
                 $echohourto = $echohour + 1;

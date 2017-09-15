@@ -25,10 +25,11 @@ $("#login-form").submit(function (event) {
         
         //document.getElementById('login-success').style.display = 'block';
         if (response==="Onnistui"){
-            alert("testi");
+            
+            NaytaKalenterit();
         }
         if(response==="Epäonnistui"){
-            alert("testi2");
+            alert("Väliaikainen kirjautuminen epäonnistui ilmoitus");
         }
         
           console.log($form.attr('action'));

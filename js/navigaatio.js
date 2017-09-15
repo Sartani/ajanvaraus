@@ -14,7 +14,7 @@ function NaytaRekisterointi(){
 
 function NaytaKalenterit(){
 
-    $("#main").load("views/reservation_list.html", function () {
+    $("#main").load("views/reservation_calendar_list.php", function () {
         //alert("Load was performed.");
         console.log("ei"); 
     });
