@@ -10,41 +10,38 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css" /> -->
-       <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
-       
-
-
     </head>
     <body>
-        <div><form id="create-calendar-form" class="create-calendar-form" method="post" action="classes/calendar.php">
+        <div><form id="create-calendar-form" method="post" action="classes/calendar.php">
 
   <div class="form-group">
     <label for="CalendarName">Kalenterin nimi</label>
     <input type="text" class="form-control" id="CalendarName" name="calendar_name" placeholder="Kalenterin nimi">
-    <small id="CalendarNameHelp" class="form-text text-muted">Maksimi pituus 64 kirjainta</small>
+    <small id="CalendarNameHelp" class="form-text text-muted">Maksimi pituus 64 merkkiä </small>
   </div>
   <div class="form-group">
     <label for="HowManyMinutes">Kuinka monta minuuttia voi varata</label>
-    <select class="form-control" id="HowManyMinutes">
+    <select class="form-control" id="HowManyMinutes" name="HowManyMinutes">
       <option>15</option>
       <option>30</option>
       <option>45</option>
     </select>
   </div>
    <div class="form-group">
-    <label for="StartTime">Monesta lähtien aikoja voi varataa</label>
-    <select class="form-control" id="StartTime">
-      <option>8</option>
-      <option>9</option>
-      <option>10</option>
+    <label for="AvailableDays">Minä päivinä aikoja voi varata</label>
+    <select class="form-control" id="AvailableDays" name="AvailableDays">
+      <option>ma-pe</option>
+      <option>ma-la</option>
+      <option>ma-su</option>
     </select>
   </div>
                  
                  <div class="form-group">
-    <label for="DateTimeRange">Kalenterin nimi</label>
+    <label for="DateTimeRange">Kalenterin aikaväli</label>
     <input type="text" class="form-control" id="DateTimeRange" name="DateTimeRange">
-    <small id="DateTimeRangeHelp" class="form-text text-muted">Valitse mistä mihin aikoja on varattavissa</small>
+    <small id="DateTimeRangeHelp" class="form-text text-muted">Valitse mistä mihin asti kalenteri on voimassa ja monesta moneen aikoja on varattavissa</small>
   </div>
                 <div><input type="text" name="daterange" value="01/01/2015 - 01/31/2015" /> 
              </div>
@@ -53,6 +50,7 @@ and open the template in the editor.
     <div class="row">
         <div class="col-sm-4"></div>
         <div class="col-sm-4"></div>
+        <input type="hidden" name="create_calendar" value="create_calendar">
         <div class="col-sm-4"><button type="submit"  name="create_calendar" value="create_calendar" class="btn btn-primary">Luo kalenteri </button></div>
       </div>
     
@@ -61,11 +59,8 @@ and open the template in the editor.
   
   
 </form></div>
-     
-        <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script> 
-        <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-        <script type="text/javascript" src="js/datetimeoptions.js"> </script>
         
-
+        <script type="text/javascript" src="js/datetimeoptions.js"> </script>
+        <script type="text/javascript" src ="js/create_calendar.js"> </script>
     </body>
 </html>

@@ -5,7 +5,7 @@ $(function() {
     "timePicker24Hour": true,
     "timePickerIncrement": 15,
     "locale": {
-        "format": "DD/MM/YYYY",
+        "format": "DD/MM/YYYY h:mm",
         "separator": " - ",
         "applyLabel": "Apply",
         "cancelLabel": "Cancel",
