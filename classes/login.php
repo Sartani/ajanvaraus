@@ -10,10 +10,17 @@ class login {
             session_start();
             $this->Login($_POST["user_email"], $_POST["user_password"]);
         }else{
-            echo "jotain meni nyt pieleen";
+           #do stuff
         }
     }
-
+     public function IsUserLogged(){
+         session_start();
+           if (isset($_SESSION['logged']) AND $_SESSION['logged']=='TRUE') {
+               return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
     private function Login($user_email, $user_password) {
         $mysql = new mysql();
 

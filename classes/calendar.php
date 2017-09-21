@@ -10,22 +10,19 @@
 class calendar {
     
      public function __construct() {
-        echo "Ajanvaraus";
-
      
 
+     if (isset($_POST['calendar'])){
+                echo "<h1> ". $_POST['calendar'] . "</h1> <br>";
+            }
+            if (!isset($_POST['calendar'])){
+                echo "ei toimi";
+            }
+
         if (isset($_SESSION['logged']) AND $_SESSION['logged'] == 'TRUE' and ! isset($_POST['create_calendar'])) {
+            
             $this->GenerateCalendar('7', '', '8', '8');
             #Generoi kalenteri näkymä kirjautuneelle käyttäjälle
-        } elseif (isset($_POST['create_calendar'])) {
-            echo"banaanimaakari";
-            $DateTimeRange = $_POST['DateTimeRange'];
-            $days = $_POST['AvailableDays'];
-            $calendar_name = $_POST['CalendarName'];
-            $reservation_intervals = $_POST['HowManyMinutes'];
-            $start_time = $_POST['FromWhen'];
-            $end_time = $_POST['ToWhen'];
-            $this->CreateNewCalendar($calendar_name, $DateTimeRange, $days, $reservation_intervals,$start_time, $end_time);
         } elseif(!isset($_SESSION['logged]'])) {
             $this->GenerateCalendar('7', '', '8', '8');
         }

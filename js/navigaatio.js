@@ -25,10 +25,15 @@ function NaytaKalenterit(){
         //alert("Load was performed.");
     });
 }
-function ShowCalendar(){
 
-    $("#main").load("views/reservation_calendar.php", function () {
-        //alert("Load was performed.");
+function ShowCalendar(calendar){
+
+    $("#main").load("views/reservation_calendar.php",{"calendar" : calendar}, function () {
+         //alert("Load was performed.");
+    });
+}
+function ShowLuoKalenteri(){
+    $("#main").load("views/luo_kalenteri.html", function () {
     });
 }
 var request;
