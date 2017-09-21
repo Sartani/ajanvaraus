@@ -6,13 +6,13 @@
  * @author Mikko
  */
 
-$calendar = new calendar();
+
 class calendar {
     
      public function __construct() {
         echo "Ajanvaraus";
 
-        session_start();
+     
 
         if (isset($_SESSION['logged']) AND $_SESSION['logged'] == 'TRUE' and ! isset($_POST['create_calendar'])) {
             $this->GenerateCalendar('7', '', '8', '8');
@@ -21,11 +21,12 @@ class calendar {
             echo"banaanimaakari";
             $DateTimeRange = $_POST['DateTimeRange'];
             $days = $_POST['AvailableDays'];
-            $list_name = $_POST['CalendarName'];
+            $calendar_name = $_POST['CalendarName'];
             $reservation_intervals = $_POST['HowManyMinutes'];
-            $this->CreateNewCalendar();
-        } else {
-            session_destroy();
+            $start_time = $_POST['FromWhen'];
+            $end_time = $_POST['ToWhen'];
+            $this->CreateNewCalendar($calendar_name, $DateTimeRange, $days, $reservation_intervals,$start_time, $end_time);
+        } elseif(!isset($_SESSION['logged]'])) {
             $this->GenerateCalendar('7', '', '8', '8');
         }
     }
@@ -86,9 +87,6 @@ class calendar {
     private function WhichDay($day) {
         $days = array("Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai", "Lauantai", "Sunnuntai");
         return $days[$day];
-    }
-     private function CreateNewCalendar() {
-        
     }
 
 }

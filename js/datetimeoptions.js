@@ -1,16 +1,14 @@
 $(function() {
     $('input[name="DateTimeRange"]').daterangepicker({
     "showWeekNumbers": true,
-    "timePicker": true,
-    "timePicker24Hour": true,
-    "timePickerIncrement": 15,
     "locale": {
-        "format": "DD/MM/YYYY h:mm",
-        "separator": " - ",
-        "applyLabel": "Apply",
-        "cancelLabel": "Cancel",
-        "fromLabel": "From",
-        "toLabel": "To",
+       
+        "format": "YYYY-MM-DD",
+        "separator": " ",
+        "applyLabel": "Valitse",
+        "cancelLabel": "Peruuta",
+        "fromLabel": "Mistä",
+        "toLabel": "Mihin",
         "customRangeLabel": "Custom",
         "weekLabel": "vk",
         "daysOfWeek": [
@@ -47,8 +45,4 @@ $(function() {
     
 });
 
-
-$(function() {
-    $('input[name="daterange"]').daterangepicker();
-});
 

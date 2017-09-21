@@ -14,11 +14,11 @@ and open the template in the editor.
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
     </head>
     <body>
-        <div><form id="create-calendar-form" method="post" action="classes/calendar.php">
+        <div><form id="create-calendar-form" method="post" action="classes/processforms.php">
 
   <div class="form-group">
     <label for="CalendarName">Kalenterin nimi</label>
-    <input type="text" class="form-control" id="CalendarName" name="calendar_name" placeholder="Kalenterin nimi">
+    <input type="text" class="form-control" id="CalendarName" name="CalendarName" placeholder="Kalenterin nimi">
     <small id="CalendarNameHelp" class="form-text text-muted">Maksimi pituus 64 merkkiä </small>
   </div>
   <div class="form-group">
@@ -42,9 +42,20 @@ and open the template in the editor.
     <label for="DateTimeRange">Kalenterin aikaväli</label>
     <input type="text" class="form-control" id="DateTimeRange" name="DateTimeRange">
     <small id="DateTimeRangeHelp" class="form-text text-muted">Valitse mistä mihin asti kalenteri on voimassa ja monesta moneen aikoja on varattavissa</small>
+  </div> 
+                <div class="row">
+   <div class="col-4">
+    <label for="FromWhen">Monesta alkaen</label>
+    <select class="form-control" id="FromWhen" name="FromWhen">
+    </select>
   </div>
-                <div><input type="text" name="daterange" value="01/01/2015 - 01/31/2015" /> 
-             </div>
+  <div class="col-4"> 
+      <label for="ToWhen">Moneen asti</label>
+    <select class="form-control" id="ToWhen" name="ToWhen">
+    </select>
+  </div>
+  <div class="col-4"> </div>
+  </div>
     <!-- Tähän olisi tarkoitus sitten tulla vielä mahdollisuus valita mistä mihin asti kyseinen kalenteri on-->
 
     <div class="row">
