@@ -29,18 +29,46 @@ and open the template in the editor.
       <option>45</option>
     </select>
   </div>
-   <div class="form-group">
-    <label for="AvailableDays">Minä päivinä aikoja voi varata</label>
-    <select class="form-control" id="AvailableDays" name="AvailableDays">
-      <option>ma-pe</option>
-      <option>ma-la</option>
-      <option>ma-su</option>
-    </select>
-  </div>
-                 
+              Valitse päivät joina aikoja voi varata <br>   
+        <div class="form-check form-check-inline">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" name="AvailableDaysCheckboxma" id="AvailableDaysCheckboxma" value="ma"> maanantai
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" name="AvailableDaysCheckboxti" id="AvailableDaysCheckboxti" value="ti"> tiistai
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" name="AvailableDaysCheckboxke" id="AvailableDaysCheckboxke" value="ke"> keskiviiikko
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" name="AvailableDaysCheckboxto" id="AvailableDaysCheckboxto" value="to"> torstai
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" name="AvailableDaysCheckboxpe" id="AvailableDaysCheckboxpe" value="pe"> perjantai
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" name="AvailableDaysCheckboxla" id="AvailableDaysCheckboxla" value="la"> lauantai
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" name="AvailableDaysCheckboxsu" id="AvailableDaysCheckboxsu" value="su"> sunnuntai
+            </label>
+        </div>
+
                  <div class="form-group">
     <label for="DateTimeRange">Kalenterin aikaväli</label>
-    <input type="text" class="form-control" id="DateTimeRange" name="DateTimeRange">
+    <input type="text" class="form-control" id="DateTimeRange" name="DateTimeRange" readonly>
     <small id="DateTimeRangeHelp" class="form-text text-muted">Valitse mistä mihin asti kalenteri on voimassa ja monesta moneen aikoja on varattavissa</small>
   </div> 
                 <div class="row">

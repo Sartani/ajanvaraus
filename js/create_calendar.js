@@ -33,7 +33,7 @@ $("#create-calendar-form").submit(function (event) {
         request.abort();
     }
     var $form = $(this);
-    var $inputs = $form.find("input,submit, select, button, textarea");
+    var $inputs = $('#form').find(':input');
     var serializedData = $form.serialize();
     
     $inputs.prop("disabled", true);

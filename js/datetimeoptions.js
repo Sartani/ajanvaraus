@@ -1,3 +1,8 @@
+var date = new Date();
+var d = date.getDate();
+var y = date.getFullYear();
+var m = date.getMonth();
+var m = m + 1;
 $(function() {
     $('input[name="DateTimeRange"]').daterangepicker({
     "showWeekNumbers": true,
@@ -37,10 +42,11 @@ $(function() {
         "firstDay": 1
     },
     "showCustomRangeLabel": false,
-    "startDate": "09/09/2017",
-    "endDate": "15/09/2017"
+    "minDate": ""+y+"-"+m+"-"+d+"",
+    "starDate": ""+y+"-"+m+"-"+d+"",
+    "endDate": ""+y+"-"+m+"-"+d+""
 }, function(start, end, label) {
-  console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+  console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
 });
     
 });

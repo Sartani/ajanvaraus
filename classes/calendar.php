@@ -14,6 +14,7 @@ class calendar {
 
      if (isset($_POST['calendar'])){
                 echo "<h1> ". $_POST['calendar'] . "</h1> <br>";
+                
             }
             if (!isset($_POST['calendar'])){
                 echo "ei toimi";
