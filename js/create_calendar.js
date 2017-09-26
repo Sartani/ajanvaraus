@@ -1,31 +1,4 @@
-$(document).ready(function(){
-        id = "FromWhen";
-        GenerateHoursMinutes(id);
-        id ="ToWhen"
-        GenerateHoursMinutes(id);
-});
 
-function GenerateHoursMinutes() {
-    var hour = 0;
-
-    while (hour < 24) {
-        var minutes = 00;
-        while (minutes <= 45) {
-            if (minutes != 0) {
-                $("<option>" + hour + ":" + minutes + "</option>").appendTo("#" + id);
-            } else {
-                if (hour === 8) {
-                    $("<option selected>" + hour + ":00</option>").appendTo("#" + id);
-                } else {
-                    $("<option >" + hour + ":00</option>").appendTo("#" + id);
-                }
-            }
-
-            minutes = minutes + 15;
-        }
-        hour = hour + 1;
-    }
-}
 var request;
 $("#create-calendar-form").submit(function (event) {
     event.preventDefault();

@@ -48,7 +48,84 @@ $(function() {
 }, function(start, end, label) {
   console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
 });
-    
+
+$('#ResumeFromWhen').timepicker({ 'timeFormat': 'H:i:s' });
+
+
 });
 
+
+
+
+$( document ).ready(function() {
+alert("herps11");
+
+
+$('#FromWhen').timepicker({
+    'step': 15,
+    useSelect: 'TRUE' ,
+    'showDuration':"false",
+    'minTime': '08:00',
+
+});
+
+$('#ToWhen').timepicker({
+    'step': 15,
+    useSelect: 'TRUE' ,
+    'showDuration':"false",
+    'minTime': '08:00',
+
+});
+
+$('#TimesBeforeBreak .time').timepicker({
+ timeFormat: 'H:i ',
+    'step': 15,
+    useSelect: 'TRUE' ,
+    'showDuration':"false"
+
+
+});
+
+
+
+var TimesBeforeBreak = document.getElementById('TimesBeforeBreak');
+var timeOnlyDatepair = new Datepair(TimesBeforeBreak);
+var TimesAfterBreak = document.getElementById('TimesAfterBreak');
+var TimesAfterBreak = new Datepair(TimesAfterBreak);
+
+
+});
+
+$('#NeedBreak').change(function () {
+    if (this.checked) {
+        alert("checkbox!")
+        $('#ResumeFromWhen').timepicker({
+            'step': 15,
+            useSelect: 'TRUE',
+            'showDuration': "false",
+            'minTime': '08:00'
+
+        });
+        $('#ResumeToWhen').timepicker({
+            'step': 15,
+            useSelect: 'TRUE',
+            'showDuration': "false",
+            'minTime': '08:00'
+
+        });
+        $('#TimesAfterBreak .time').timepicker({
+ timeFormat: 'H:i ',
+    'step': 15,
+    useSelect: 'TRUE' ,
+    'showDuration':"false",
+
+
+});
+        document.getElementById('TimesAfterBreakId').style.display = 'block';
+    }
+    if (!this.checked) {
+
+        document.getElementById('TimesAfterBreakId').style.display = 'none';
+    }
+});
 
