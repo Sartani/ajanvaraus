@@ -20,22 +20,28 @@ class ProcessForms {
             $reservation_intervals = $_POST['HowManyMinutes'];
             $start_time = $_POST['FromWhen'];
             $end_time = $_POST['ToWhen'];
-            if ($this->ValidateLuoKalenteriForm($DateTimeRange, $days, $calendar_name, $reservation_intervals, $start_time, $end_time)) {
+            $break_start = NULL;
+            $break_end = NULL;
+            if(isset($_POST['NeedBreak'])){
+                $break_start = $_POST['BreakFromWhen'];
+                $break_end = $_POST['BreakToWhen'];
+            }
+            if ($this->ValidateLuoKalenteriForm($DateTimeRange, $days, $calendar_name, $reservation_intervals, $start_time, $end_time, $break_start, $break_end)) {
                 require_once("mysql.php");
                 $mysql = new mysql();
-                $this->CreateNewCalendar($calendar_name, $DateTimeRange, $days, $reservation_intervals, $start_time, $end_time, $mysql);
+                $this->CreateNewCalendar($calendar_name, $DateTimeRange, $days, $reservation_intervals, $start_time, $end_time, $break_start, $break_end, $mysql);
             }
         }
     }
 
-    private function CreateNewCalendar($calendar_name, $DateTimeRange, $days, $reservation_intervals, $start_time, $end_time, $mysql) {
+    private function CreateNewCalendar($calendar_name, $DateTimeRange, $days, $reservation_intervals, $start_time, $end_time, $break_start, $break_end, $mysql) {
 
 
 //$start_time = $this->ExplodeString(1, $DateTimeRange);
 //$end_time = $this->ExplodeString(4, $DateTimeRange);
         $start_date = $this->ExplodeString(0, $DateTimeRange);
         $end_date = $this->ExplodeString(1, $DateTimeRange);
-        $this->InsertToCalendarOptions($calendar_name, $days, $reservation_intervals, $start_date, $end_date, $start_time, $end_time, $mysql);
+        $this->InsertToCalendarOptions($calendar_name, $days, $reservation_intervals, $start_date, $end_date, $start_time, $end_time, $break_start, $break_end, $mysql);
         $dates = $this->StartToEndDates($start_date, $end_date, 'dates');
         $weekdays = $this->StartToEndDates($start_date, $end_date, 'weekdays');
         $this->InsertToCalendarDates($dates, $weekdays, $mysql);
@@ -50,13 +56,13 @@ class ProcessForms {
         return $split[$slot];
     }
 
-    private function InsertToCalendarOptions($calendar_name, $days, $reservation_intervals, $start_date, $end_date, $start_time, $end_time, $mysql) {
+    private function InsertToCalendarOptions($calendar_name, $days, $reservation_intervals, $start_date, $end_date, $start_time, $end_time, $break_start, $break_end, $mysql) {
 
         if ($mysql->connectDB()) {
             $mysql->db_connection;
 
-            if ($stmt = $mysql->db_connection->prepare('INSERT INTO calendar_options (start_date, end_date, start_time, end_time, reservable_days, calendar_name, reservation_intervals) VALUES (?,?,?,?,?,?,?)')) {
-                $stmt->bind_param('ssssssi', $start_date, $end_date, $start_time, $end_time, $days, $calendar_name, $reservation_intervals);
+            if ($stmt = $mysql->db_connection->prepare('INSERT INTO calendar_options (start_date, end_date, start_time, end_time, break_start_time, break_end_time, reservable_days, calendar_name, reservation_intervals) VALUES (?,?,?,?,?,?,?,?,?)')) {
+                $stmt->bind_param('ssssssssi', $start_date, $end_date, $start_time,$end_time, $break_start, $break_end, $days, $calendar_name, $reservation_intervals);
                 $stmt->execute();
                 $this->id = $mysql->db_connection->insert_id;
             } else {

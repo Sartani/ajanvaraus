@@ -48,18 +48,12 @@ $(function() {
 }, function(start, end, label) {
   console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
 });
-
-$('#ResumeFromWhen').timepicker({ 'timeFormat': 'H:i:s' });
-
-
 });
 
 
 
 
 $( document ).ready(function() {
-alert("herps11");
-
 
 $('#FromWhen').timepicker({
     'step': 15,
@@ -98,15 +92,14 @@ var TimesAfterBreak = new Datepair(TimesAfterBreak);
 
 $('#NeedBreak').change(function () {
     if (this.checked) {
-        alert("checkbox!")
-        $('#ResumeFromWhen').timepicker({
+        $('#BreakFromWhen').timepicker({
             'step': 15,
             useSelect: 'TRUE',
             'showDuration': "false",
             'minTime': '08:00'
 
         });
-        $('#ResumeToWhen').timepicker({
+        $('#BreakToWhen').timepicker({
             'step': 15,
             useSelect: 'TRUE',
             'showDuration': "false",
