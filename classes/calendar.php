@@ -16,7 +16,7 @@ class calendar {
      
 
      if (isset($_POST['calendar'])) {
-            echo "<h1> " . $_POST['calendar'] . "</h1> <br>";
+            echo "<h1 id='CalendarName'>" . $_POST['calendar'] . "</h1> <br>";
             require_once("mysql.php");
             $mysql = new mysql();
             $calendar = $_POST['calendar'];
@@ -89,7 +89,7 @@ class calendar {
     private function EchoMinutes($echoday, $echohour, $intervals, $echodate) {
         $echominutes = '00';
         while ($echominutes <= 45) {
-            echo '<button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#ReserveTime" data-day="' . $echoday . '"data-date="' . $echodate. '" data-time-to-reserve="' . $echohour . ':' . $echominutes . '">' . $echominutes . '</button>';
+            echo '<button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#ReserveTime" data-day="' . $echoday . '"data-date="' . $echodate . '" data-time-to-reserve="' . $echohour . ':' . $echominutes . '">' . $echominutes . '</button>';
             $echominutes = $echominutes + $intervals;
         }
     }
@@ -105,7 +105,6 @@ class calendar {
         } elseif ($when == "") {
             $when = date("Y-m-d");
             if ($mysql->connectDB()) {
-                $mysql->db_connection;
                 $stmt = $mysql->db_connection->prepare('SELECT calendar_dates.date, calendar_dates.weekday FROM calendar_dates INNER JOIN calendar_options ON calendar_dates.calendar_id = calendar_options.calendar_id WHERE calendar_options.calendar_name = (?) ORDER BY (date) ASC');
                 $stmt->bind_param('s', $calendar);
                 $stmt->execute();
@@ -147,7 +146,6 @@ class calendar {
             $addeddate = $this->AddDate($smallestday[0], $adddate);
             $whichday = $this->WhichDay($day);
             $datesandweekdays[] = $addeddate . " " . $this->WhichDay($day);
-            echo "tässä1 -->" . $datesandweekdays[$day];
             $day = $day + 1;
             $adddate = $adddate + 1;
         }return $datesandweekdays;
@@ -156,28 +154,20 @@ class calendar {
     private function AddDate($addaysto, $howmanydays) {
         $date = new DateTime($addaysto);
         $date->add(new DateInterval('P' . $howmanydays . 'D'));
-        $addeddate = $date->format('y-m-d');
+        $addeddate = $date->format('Y-m-d');
         return $addeddate;
     }
 
-    private function SubstractDate($addaysto, $howmanydays) {
-        $date = new DateTime($addaysto);
+    private function SubstractDate($substractdaysfrom, $howmanydays) {
+        $date = new DateTime($substractdaysfrom);
         $date->sub(new DateInterval('P' . $howmanydays . 'D'));
-        $substracteddate = $date->format('y-m-d');
+        $substracteddate = $date->format('Y-m-d');
         return $substracteddate;
     }
-      
-    private function ExplodeString($slot,  $StringToExplode) {
+
+    private function ExplodeString($slot, $StringToExplode) {
         $split = explode(" ", $StringToExplode);
         return $split[$slot];
     }
-    private function  SeperateDaysDates ($DatesDays, $ChooseReturn){
-        if ($ChooseReturn == 'Days'){
-            
-        }elseif($ChooseReturn=='dates'){
-            
-        }else{
-            echo "Tapahtui virhe päivien ja päiväysten erottelussa. Ole hyvä ja ota yhteyttä ylläpitoon";
-        }
-    }
+
 }

@@ -32,6 +32,14 @@ class ProcessForms {
                 $this->CreateNewCalendar($calendar_name, $DateTimeRange, $days, $reservation_intervals, $start_time, $end_time, $break_start, $break_end, $mysql);
             }
         }
+        if (isset($_POST['ReserveOnDate']) AND isset($_POST['TimeToReserve']) AND isset($_POST['reserver-name'])) {
+            if ($this->ValidateReserveTimeForm($_POST['ReserveOnDate'], $_POST['TimeToReserve'], $_POST['reserver-name'])) {
+                require_once("mysql.php");
+                $mysql = new mysql();
+                $this->SelectIdByName($_POST['PassCalendarName'],$mysql);
+                $this->InsertToReservations($_POST['ReserveOnDate'], $_POST['TimeToReserve'], $_POST['reserver-name'], $mysql);
+            }
+        }
     }
 
     private function CreateNewCalendar($calendar_name, $DateTimeRange, $days, $reservation_intervals, $start_time, $end_time, $break_start, $break_end, $mysql) {
@@ -139,6 +147,50 @@ class ProcessForms {
         
         echo $ReserVableDays;
         return $ReserVableDays;
+    }
+
+    private function InsertToReservations($ReserveOnDate, $TimeToReserve, $ReserverName, $mysql) {
+        if ($mysql->connectDB()) {
+
+            $id = $this->id;
+            if ($stmt = $mysql->db_connection->prepare('INSERT INTO calendar_reservations (calendar_id, reservation_date, reservation_time, reserver_name) VALUES (?, ?, ?,?)')) {
+                $stmt->bind_param('isss', $id, $ReserveOnDate, $TimeToReserve, $ReserverName);
+                if($stmt->execute()){
+                echo "Tiedot syötetty";}else{
+                print_r("Tietoja ei syötetty. " . htmlspecialchars($mysql->db_connection->error));}
+            } else {
+                print_r('prepare() failed: ' . htmlspecialchars($mysql->db_connection->error));
+            }
+        } else {
+            echo "Tietokantaan ei saatu yhteyttä";
+        }
+    }
+    
+    private function SelectIdByName($name, $mysql) {
+        if ($mysql->connectDB()) {
+
+
+            if ($stmt = $mysql->db_connection->prepare('SELECT calendar_id FROM calendar_options WHERE calendar_name = ?')) {
+                $stmt->bind_param('s', $name);
+                if ($stmt->execute()) {
+                    $result= $stmt->get_result();
+                    $row = $result->fetch_row();
+                    $this->id = $row[0];
+
+                } else {
+                    print_r("ID ei haettu. " . htmlspecialchars($mysql->db_connection->error));
+                }
+            } else {
+                print_r('prepare() failed: ' . htmlspecialchars($mysql->db_connection->error));
+            }
+        } else {
+            echo "Tietokantaan ei saatu yhteyttä";
+        }
+    }
+
+    private function ValidateReserveTimeForm($ReserveOnDate, $TimeToReserve, $ReserverName) {
+        #ToDo
+        return TRUE;
     }
 
 }

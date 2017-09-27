@@ -22,22 +22,24 @@ and open the template in the editor.
         </button>
       </div>
       <div class="modal-body">
-        <form>
+        <form id="reserve-time-form" method="post" action="classes/processforms.php">
 
             
           <div class="form-group">
             <label for="recipient-name" class="form-control-label">Nimesi</label>
-            <input type="text" class="form-control" id="reserver-name">
-            <div id="alert-reserve-success" style="display:none" class="alert alert-success" role="alert">
-                    Aika on nyt varattu onnistuneesti!
-                </div>
+            <input type="text" class="form-control" name="reserver-name" id="reserver-name">
+            <input type="hidden" id="ReserveOnDate" name ="ReserveOnDate" value="">
+            <input type="hidden" id="TimeToReserve" name="TimeToReserve" value="">
+              <input type="hidden" id="PassCalendarName" name="PassCalendarName" value="">
           </div>
-            
+            <button type="button" class="btn btn-secondary" id="reserve-button-close" onclick="ReserveButtonClose()" data-dismiss="modal">Sulje</button>
+            <button type="submit" class="btn btn-primary" id="reserve-button-confirm" > Varaa aika</button>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" id="reserve-button-close" onclick="ReserveButtonClose()" data-dismiss="modal">Sulje</button>
-        <button type="button" class="btn btn-primary" id="reserve-button-confirm" onclick="ReserveButtonConfirm()">Varaa aika</button>
+          <div id="alert-reserve-success" style="display:none" class="alert alert-success" role="alert">
+              Aika on nyt varattu onnistuneesti!
+          </div>
       </div>
     </div>
   </div>
