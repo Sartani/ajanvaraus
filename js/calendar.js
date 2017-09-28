@@ -81,3 +81,70 @@ $("#reserve-time-form").submit(function (event) {
         $inputs.prop("disabled", false);
     });
 });
+
+$("#leftarrow").click(function() {
+
+   $("#main").load("views/reservation_calendar.php",{"calendar" : $("#CalendarName").text(), "change_week" : $("#mindateback").val()}, function () {
+    });
+});
+$("#rightarrow").click(function() {
+
+   $("#main").load("views/reservation_calendar.php",{"calendar" : $("#CalendarName").text(), "change_week" : $("#mindateforward").val()}, function () {
+    });
+});
+
+
+var date = new Date();
+var d = date.getDate();
+var y = date.getFullYear();
+var m = date.getMonth();
+var m = m + 1;
+$(function() {
+    $('input[name="DateTimeRangeSelect"]').daterangepicker({
+    "showWeekNumbers": true,
+    "singleDatePicker": true,
+    "locale": {
+       
+        "format": "YYYY-MM-DD",
+        "separator": " ",
+        "applyLabel": "Valitse",
+        "cancelLabel": "Peruuta",
+        "fromLabel": "Mistä",
+        "toLabel": "Mihin",
+        "customRangeLabel": "Custom",
+        "weekLabel": "vk",
+        "daysOfWeek": [
+            "su",
+            "ma",
+            "ti",
+            "ke",
+            "to",
+            "pe",
+            "la"
+        ],
+        "monthNames": [
+            "tammi",
+            "helmi",
+            "maalis",
+            "huhti",
+            "touko",
+            "kesä",
+            "heinä",
+            "elo",
+            "syys",
+            "loka",
+            "marras",
+            "joulu"
+        ],
+        "firstDay": 1
+    },
+    "showCustomRangeLabel": false,
+    "minDate": ""+y+"-"+m+"-"+d+"",
+    "maxDate": $("#MaxDate").val(),
+    "starDate": ""+y+"-"+m+"-"+d+"",
+   }, function(start) {
+  console.log('New date selected: ' + start.format('YYYY-MM-DD'));
+  $("#main").load("views/reservation_calendar.php",{"calendar" : $("#CalendarName").text(), "change_week" : start.format('YYYY-MM-DD')}, function () {
+    });
+});
+});

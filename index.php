@@ -10,17 +10,18 @@
     <title> Ajanvaraus</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   </head>
   <body>
     <div class="container">
       <div class="row">
         <div  class="col-sm-2" id="side_left">  <?php include_once ("views/navbar.html") ?></div>
-        <div class="col-sm-8" id="main"> <h1> Ajanvaraus etusivu</h1>
+        <div class="col-sm-9" id="main"> <h1> Ajanvaraus etusivu</h1>
             
         <button type="button" onclick="NaytaKalenterit()" id="varaa" class="btn btn-primary btn-lg">Varaa aikoja</button>
         <button type="button" onclick="NaytaKirjautuminen()"id="katso" class="btn btn-secondary btn-lg">Katso varattuja</button>
         </div>
-        <div class="col-sm-2" id="side_right"></div>
+        <div class="col-sm-1" id="side_right"></div>
       </div>
     </div>
     
