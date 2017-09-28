@@ -124,22 +124,22 @@ class ProcessForms {
     private function CombineReservableDays() {
         $ReserVableDays = "";
         if (isset($_POST['AvailableDaysCheckboxma'])) {
-            $ReserVableDays = $ReserVableDays . $_POST['AvailableDaysCheckboxma'] . ",";
+            $ReserVableDays = $ReserVableDays . $_POST['AvailableDaysCheckboxma'] . " ";
         }
         if (isset($_POST['AvailableDaysCheckboxti'])) {
-            $ReserVableDays = $ReserVableDays . $_POST['AvailableDaysCheckboxti'] . ",";
+            $ReserVableDays = $ReserVableDays . $_POST['AvailableDaysCheckboxti'] . " ";
         }
         if (isset($_POST['AvailableDaysCheckboxke'])) {
-            $ReserVableDays = $ReserVableDays . $_POST['AvailableDaysCheckboxke'] . ",";
+            $ReserVableDays = $ReserVableDays . $_POST['AvailableDaysCheckboxke'] . " ";
         }
         if (isset($_POST['AvailableDaysCheckboxto'])) {
-            $ReserVableDays = $ReserVableDays . $_POST['AvailableDaysCheckboxto'] . ",";
+            $ReserVableDays = $ReserVableDays . $_POST['AvailableDaysCheckboxto'] . " ";
         }
         if (isset($_POST['AvailableDaysCheckboxpe'])) {
-            $ReserVableDays = $ReserVableDays . $_POST['AvailableDaysCheckboxpe'] . ",";
+            $ReserVableDays = $ReserVableDays . $_POST['AvailableDaysCheckboxpe'] . " ";
         }
         if (isset($_POST['AvailableDaysCheckboxla'])) {
-            $ReserVableDays = $ReserVableDays . $_POST['AvailableDaysCheckboxla'] . ",";
+            $ReserVableDays = $ReserVableDays . $_POST['AvailableDaysCheckboxla'] . " ";
         }
         if (isset($_POST['AvailableDaysCheckboxsu'])) {
             $ReserVableDays = $ReserVableDays . $_POST['AvailableDaysCheckboxsu'];
