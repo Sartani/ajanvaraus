@@ -92,6 +92,11 @@ $("#rightarrow").click(function() {
    $("#main").load("views/reservation_calendar.php",{"calendar" : $("#CalendarName").text(), "change_week" : $("#mindateforward").val()}, function () {
     });
 });
+$("#printview").click(function() {
+
+   $("#main").load("views/reservation_calendar.php",{"calendar" : $("#CalendarName").text(), "print_view" : "true"}, function () {
+    });
+});
 
 
 var date = new Date();

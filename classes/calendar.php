@@ -40,17 +40,20 @@ class calendar {
     }
 
     private function GenerateCalendar($alloweddays, $intervals, $HourEnd, $HourStart, $calendarname, $mysql, $breakstart, $breakend) {
-          $daysasnumbers = ["Mon" => "0", "Tue" => "1",
+        $daysasnumbers = ["Mon" => "0", "Tue" => "1",
             "Wed" => "2", "Thu" => "3", "Fri" => "4",
             "Sat" => "5", "Sun" => "6"];
-          
+        if (isset($_POST['print_view'])) {
+            $printview = TRUE;
+        }else {
+            $printview = FALSE;
+        }
         $howmanydays = count($this->reservable_days);
         $smallestday = $this->reservable_days[0];
         $datesandweekdays = $this->GenerateWeekDaysDates($howmanydays, $smallestday, $daysasnumbers);
         $this->GenerateDays($datesandweekdays);
         $breaktimes = $this->GenerateBreakTimes($breakstart, $breakend);
-        $this->GenerateHours($alloweddays, $HourEnd, $HourStart, $datesandweekdays, $intervals, $calendarname, $mysql, $daysasnumbers, $breaktimes);
-        
+        $this->GenerateHours($alloweddays, $HourEnd, $HourStart, $datesandweekdays, $intervals, $calendarname, $mysql, $daysasnumbers, $breaktimes, $printview);
     }
 
     private function GenerateDays($datesandweekdays) {
@@ -69,7 +72,7 @@ class calendar {
         echo '</tr> </thead>';
     }
 
-    private function GenerateHours($alloweddays, $Hourstart, $HourEnd, $datesandweekdays, $intervals, $calendarname, $mysql, $daysasnumbers, $breaktimes) {
+    private function GenerateHours($alloweddays, $Hourstart, $HourEnd, $datesandweekdays, $intervals, $calendarname, $mysql, $daysasnumbers, $breaktimes, $printview) {
         echo '<tbody>';
         $echohour = new DateTime($Hourstart);
         $echohour = $echohour->format('G');
@@ -95,7 +98,10 @@ class calendar {
                 $thisdayreservations = $this->SelectReservationsByDateAndName($calendarname, $echodate, $mysql);
 
                 $allowed = TRUE;
-                if (!in_array($tdstart, $allowedaysasnumbers)) {
+                if ($printview) {
+                        echo "<td><div><div><div>";
+                    $this->EchoMinutes($echoday, $echohour, $intervals, $echodate, $thisdayreservations, $allowed, $breaktimes, $printview);
+                } elseif (!in_array($tdstart, $allowedaysasnumbers)) {
                     echo'<td> <button class="btn btn-danger btn-block" type="button" data-toggle="collapse" data-target="#' . $echoday . '-collapse-' . $echohour . '" aria-expanded="false">'
                     . $echohour . ' - ' . $echohourto . '</button>'
                     . ' <div class="collapse" id="' . $echoday . '-collapse-' . $echohour . '">'
@@ -103,6 +109,7 @@ class calendar {
                     . '<div class="btn-group-vertical btn-block" role="group" aria-label="Vertical button group">';
                     $allowed = FALSE;
                     $formattedtime = "";
+                    $this->EchoMinutes($echoday, $echohour, $intervals, $echodate, $thisdayreservations, $allowed, $breaktimes, $printview);
                 } elseif (in_array($tdstart, $allowedaysasnumbers)) {
                     echo'<td> <button class="btn btn-primary btn-block" type="button" data-toggle="collapse" data-target="#' . $echoday . '-collapse-' . $echohour . '" aria-expanded="false">'
                     . $echohour . ' - ' . $echohourto . '</button>'
@@ -110,8 +117,8 @@ class calendar {
                     . '<div class="card card-body">'
                     . '<div class="btn-group-vertical btn-block" role="group" aria-label="Vertical button group">';
                     $allowed = TRUE;
+                    $this->EchoMinutes($echoday, $echohour, $intervals, $echodate, $thisdayreservations, $allowed, $breaktimes, $printview);
                 }
-                $this->EchoMinutes($echoday, $echohour, $intervals, $echodate, $thisdayreservations, $allowed, $breaktimes);
                 echo "</div> </div> </div> </td>";
                 $tdstart = $tdstart + 1;
             }
@@ -121,7 +128,7 @@ class calendar {
         echo'</tbody> </table> </div> </div>';
     }
 
-    private function EchoMinutes($echoday, $echohour, $intervals, $echodate, $thisdayreservations, $allowed, $breaktimes) {
+    private function EchoMinutes($echoday, $echohour, $intervals, $echodate, $thisdayreservations, $allowed, $breaktimes, $printview) {
         $echominutes = '00';
         foreach ($thisdayreservations as $rows) {
 
@@ -130,8 +137,12 @@ class calendar {
         while ($echominutes <= 45) {
             $reservabletime = $echohour . ':' . $echominutes;
             $reservabletime = new DateTime($reservabletime);
+            $reservabletimeprint = $reservabletime->format('H:i');
             $reservabletime = $reservabletime->format('H:i:s');
-            if (!in_array($reservabletime, $times, true) AND $allowed AND !in_array($reservabletime, $breaktimes)) {
+            if ($printview) {
+
+                $this->EchoPrintView($thisdayreservations, $reservabletimeprint);
+            } elseif (!in_array($reservabletime, $times, true) AND $allowed AND !in_array($reservabletime, $breaktimes)) {
                 echo '<button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#ReserveTime" data-day="' . $echoday . '"data-date="' . $echodate . '" data-time-to-reserve="' . $echohour . ':' . $echominutes . '">' . $echominutes . '</button>';
                 } elseif (in_array ($reservabletime, $times) AND $allowed AND !in_array($reservabletime, $breaktimes)) {
                 echo '<button type="button" class="btn btn-danger btn-block" " title="Varattu""' . $echoday . '"data-date="' . $echodate . '" data-time-to-reserve="' . $echohour . ':' . $echominutes . '">' . $echominutes . '</button>';
@@ -256,22 +267,26 @@ class calendar {
         }
     }
 
-    private function echoheader(){
+    private function echoheader() {
         $smallestday = $this->reservable_days[0];
         $previousweekstart = $this->SubstractDate($smallestday[0], 7);
         $nextweekstart = $this->AddDate($smallestday[0], 7);
-        $largestday = $this->reservable_days[count($this->reservable_days)-1];
+        $largestday = $this->reservable_days[count($this->reservable_days) - 1];
         echo'<head> <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" /></head>';
-        echo "<h1 id='CalendarName'>" . $_POST['calendar'] . "</h1> <p>Varattavissa 15 min aikoja</p> ";
-        echo '<input type="hidden" id="MaxDate" value ="' . $largestday[0] . '"></input>' ;
-          echo'<div class="row">
-        <div class="col-sm-4"> <i id="leftarrow" class="fa fa-caret-square-o-left" aria-hidden="true"></i> <input type ="hidden" id="mindateback" value="'. $previousweekstart . '"></input></div>
+        echo'<div class="row">
+        <div class="col-sm-8"> <h3 id="CalendarName">' . $_POST['calendar'] . '</h3> <p>Varattavissa 15 min aikoja</p> </div>
+       
+        <div class="col-sm-4 text-right" ><i id="printview" class="fa fa-print" aria-hidden="true"></i></div>
+      </div>';
+
+        echo '<input type="hidden" id="MaxDate" value ="' . $largestday[0] . '"></input>';
+        echo'<div class="row">
+        <div class="col-sm-4"> <i id="leftarrow" class="fa fa-caret-square-o-left" aria-hidden="true"></i> <input type ="hidden" id="mindateback" value="' . $previousweekstart . '"></input></div>
         <div class="form-group col-sm-4"> <input type = "text"  class="form-control" id="DateTimeRangeSelect" name="DateTimeRangeSelect" readonly> </input>  </div>
-        <div class="col-sm-4 text-right" ><i id="rightarrow" class="fa fa-caret-square-o-right" aria-hidden="true"></i><input type ="hidden" id="mindateforward" value="'. $nextweekstart . '"></input></div>
+        <div class="col-sm-4 text-right" ><i id="rightarrow" class="fa fa-caret-square-o-right" aria-hidden="true"></i><input type ="hidden" id="mindateforward" value="' . $nextweekstart . '"></input></div>
       </div>';
     }
 
-    
     private function SelectCalendarOptionsByName($calendarname, $mysql) {
         if ($mysql->connectDB()) {
             $stmt = $mysql->db_connection->prepare('SELECT * FROM calendar_options WHERE calendar_name = (?)');
@@ -306,6 +321,22 @@ class calendar {
             return $breaktimes;
         } else {
             echo "AAAA";
+        }
+    }
+    
+    private function EchoPrintView($thisdayreservations, $currenthourminute) {
+
+        if (!is_null($thisdayreservations)) {
+            foreach ($thisdayreservations as $rows) {
+
+                if (!empty($rows[1])) {
+                    $time = new DateTime($rows[1]);
+                    $time = $time->format('H:i');
+                    if ($currenthourminute === $time)
+                        echo '' . $time . ':' . $rows[2] . "<br>";
+                    $times[] = $time;
+                }
+            }
         }
     }
 
