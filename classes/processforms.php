@@ -36,8 +36,14 @@ class ProcessForms {
             if ($this->ValidateReserveTimeForm($_POST['ReserveOnDate'], $_POST['TimeToReserve'], $_POST['reserver-name'])) {
                 require_once("mysql.php");
                 $mysql = new mysql();
-                $this->SelectIdByName($_POST['PassCalendarName'],$mysql);
+                $this->SelectIdByName($_POST['PassCalendarName'], $mysql);
                 $this->InsertToReservations($_POST['ReserveOnDate'], $_POST['TimeToReserve'], $_POST['reserver-name'], $mysql);
+                if (isset($_POST['TimeToReserve2'])) {
+                    $this->InsertToReservations($_POST['ReserveOnDate'], $_POST['TimeToReserve2'], $_POST['reserver-name'], $mysql);
+                }
+                if (isset($_POST['TimeToReserve3'])) {
+                    $this->InsertToReservations($_POST['ReserveOnDate'], $_POST['TimeToReserve3'], $_POST['reserver-name'], $mysql);
+                }
             }
         }
     }

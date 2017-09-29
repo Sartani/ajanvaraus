@@ -26,7 +26,7 @@ class calendar {
             } else {
                 $this->reservable_days = $this->SelectResevableDays($calendar, "", $mysql);
             }
-            $this->echoheader();
+            $this->echoheader($calendaroptions['reservation_intervals']);
         }
         if (!isset($_POST['calendar'])) {
             echo "Mikään kalenteri ei ollut valittuna, ole hyvä ja ota yhteyttä ylläpitoon";
@@ -130,6 +130,9 @@ class calendar {
 
     private function EchoMinutes($echoday, $echohour, $intervals, $echodate, $thisdayreservations, $allowed, $breaktimes, $printview) {
         $echominutes = '00';
+        if (is_null($breaktimes)){
+            $breaktimes[]="";
+        }
         foreach ($thisdayreservations as $rows) {
 
             $times[] = $rows[1];
@@ -267,11 +270,12 @@ class calendar {
         }
     }
 
-    private function echoheader() {
+    private function echoheader($ReservableTimeLength) {
         $smallestday = $this->reservable_days[0];
         $previousweekstart = $this->SubstractDate($smallestday[0], 7);
         $nextweekstart = $this->AddDate($smallestday[0], 7);
         $largestday = $this->reservable_days[count($this->reservable_days) - 1];
+        echo '<input type="hidden" id="ReservableTimeLength" value= "' . $ReservableTimeLength . '"></input>';
         echo'<head> <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" /></head>';
         echo'<div class="row">
         <div class="col-sm-8"> <h3 id="CalendarName">' . $_POST['calendar'] . '</h3> <p>Varattavissa 15 min aikoja</p> </div>
@@ -320,7 +324,8 @@ class calendar {
             }
             return $breaktimes;
         } else {
-            echo "AAAA";
+            $breaktimes = NULL;
+            return $breaktimes;
         }
     }
     

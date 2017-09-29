@@ -20,6 +20,7 @@ $('#ReserveTime').on('show.bs.modal', function (event) {
   $('#ReserveOnDate').val(date);
   $('#TimeToReserve').val(aika);
   modal.find('.modal-title').text('Varaa aika ' + day + 'na ' + localday + ' klo ' + aika);
+  reservabletimelength();
 })
 
 function ReserveButtonConfirm() {
@@ -153,3 +154,19 @@ $(function() {
     });
 });
 });
+function reservabletimelength() {
+
+    if ($('#ReservableTimeLength').val() == '30') {
+        var timetoreserve = moment($('#TimeToReserve').val(), "HH:mm").add(15, 'minutes').format('HH:mm');
+        $('#reserve-time-form').append(' <input type="hidden" id="TimeToReserve2" name="TimeToReserve2" value="' + timetoreserve + '">');
+    }
+
+
+
+    if ($('#ReservableTimeLength').val() == '45') {
+        var timetoreserve = moment($('#TimeToReserve').val(), "HH:mm").add(15, 'minutes').format('HH:mm');
+        $('#reserve-time-form').append(' <input type="hidden" id="TimeToReserve2" name="TimeToReserve2" value="' + timetoreserve + '">');
+        var timetoreserve2 = moment($('#TimeToReserve').val(), "HH:mm").add(30, 'minutes').format('HH:mm');
+        $('#reserve-time-form').append(' <input type="hidden" id="TimeToReserve3" name="TimeToReserve3" value="' + timetoreserve2 + '">');
+    }
+}
