@@ -73,6 +73,7 @@ class ProcessForms {
                 $stmt->bind_param('ssssssssi', $start_date, $end_date, $start_time,$end_time, $break_start, $break_end, $days, $calendar_name, $reservation_intervals);
                 $stmt->execute();
                 $this->id = $mysql->db_connection->insert_id;
+                print_r(htmlspecialchars($mysql->db_connection->error));
             } else {
                 echo "Valintojen syöttö tietokantaan ei onnistunut, ole hyvä ja ota yhteyttä ylläpitoon";
                 print_r('prepare() failed: ' . htmlspecialchars($mysql->db_connection->error));

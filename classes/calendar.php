@@ -21,27 +21,25 @@ class calendar {
             $mysql = new mysql();
             $calendar = $_POST['calendar'];
             $calendaroptions = $this->SelectCalendarOptionsByName($calendar, $mysql);
-            echo $calendaroptions['start_time'];
             if (isset($_POST['change_week'])) {
                 $this->reservable_days = $this->SelectResevableDays($calendar, $_POST['change_week'], $mysql);
-            }else{
-            $this->reservable_days = $this->SelectResevableDays($calendar, "", $mysql);}
+            } else {
+                $this->reservable_days = $this->SelectResevableDays($calendar, "", $mysql);
+            }
             $this->echoheader();
         }
         if (!isset($_POST['calendar'])) {
             echo "Mikään kalenteri ei ollut valittuna, ole hyvä ja ota yhteyttä ylläpitoon";
         }
-
         if (isset($_SESSION['logged']) AND $_SESSION['logged'] == 'TRUE' and isset($_POST['create_calendar'])) {
-            
             $this->GenerateCalendar('7', '15', '8', '8', $_POST['calendar'], $mysql);
             #Generoi kalenteri näkymä kirjautuneelle käyttäjälle
-        } elseif(!isset($_SESSION['logged]'])) {
-            $this->GenerateCalendar($calendaroptions['reservable_days'], '15', $calendaroptions['start_time'], $calendaroptions['end_time'], $_POST['calendar'], $mysql);
+        } elseif (!isset($_SESSION['logged]'])) {
+            $this->GenerateCalendar($calendaroptions['reservable_days'], '15', $calendaroptions['start_time'], $calendaroptions['end_time'], $_POST['calendar'], $mysql, $calendaroptions['break_start_time'], $calendaroptions['break_end_time']);
         }
     }
 
-    private function GenerateCalendar($alloweddays, $intervals, $HourEnd, $HourStart, $calendarname, $mysql) {
+    private function GenerateCalendar($alloweddays, $intervals, $HourEnd, $HourStart, $calendarname, $mysql, $breakstart, $breakend) {
           $daysasnumbers = ["Mon" => "0", "Tue" => "1",
             "Wed" => "2", "Thu" => "3", "Fri" => "4",
             "Sat" => "5", "Sun" => "6"];
@@ -50,7 +48,8 @@ class calendar {
         $smallestday = $this->reservable_days[0];
         $datesandweekdays = $this->GenerateWeekDaysDates($howmanydays, $smallestday, $daysasnumbers);
         $this->GenerateDays($datesandweekdays);
-        $this->GenerateHours($alloweddays, $HourEnd, $HourStart, $datesandweekdays, $intervals, $calendarname, $mysql, $daysasnumbers);
+        $breaktimes = $this->GenerateBreakTimes($breakstart, $breakend);
+        $this->GenerateHours($alloweddays, $HourEnd, $HourStart, $datesandweekdays, $intervals, $calendarname, $mysql, $daysasnumbers, $breaktimes);
         
     }
 
@@ -70,32 +69,31 @@ class calendar {
         echo '</tr> </thead>';
     }
 
-    private function GenerateHours($alloweddays, $Hourstart, $HourEnd, $datesandweekdays, $intervals, $calendarname, $mysql, $daysasnumbers) {
+    private function GenerateHours($alloweddays, $Hourstart, $HourEnd, $datesandweekdays, $intervals, $calendarname, $mysql, $daysasnumbers, $breaktimes) {
         echo '<tbody>';
         $echohour = new DateTime($Hourstart);
         $echohour = $echohour->format('G');
         $HourEnd = new DateTime($HourEnd);
         $HourEnd = $HourEnd->format('G');
         $alloweddaysarray = $this->ExplodeString("", $alloweddays);
-        foreach($alloweddaysarray as $day){
-             if(isset($daysasnumbers[$day])){
-            $allowedaysasnumbers[] = $daysasnumbers[$day];}
-        } if(!isset($allowedaysasnumbers)){
+        foreach ($alloweddaysarray as $day) {
+            if (isset($daysasnumbers[$day])) {
+                $allowedaysasnumbers[] = $daysasnumbers[$day];
+            }
+        } if (!isset($allowedaysasnumbers)) {
             die("<b>Yhtään varattavaa päivää ei ole valittuna!<b>");
         }
-        echo "pataatti";
-        
 
         while ($echohour < $HourEnd) {
             echo'<tr>';
             $tdstart = 0;
+
             while ($tdstart < 7) {
                 $echodate = $this->ExplodeString(0, $datesandweekdays[$tdstart]);
                 $echoday = $this->ExplodeString(1, $datesandweekdays[$tdstart]);
                 $echohourto = $echohour + 1;
-              
                 $thisdayreservations = $this->SelectReservationsByDateAndName($calendarname, $echodate, $mysql);
-                
+
                 $allowed = TRUE;
                 if (!in_array($tdstart, $allowedaysasnumbers)) {
                     echo'<td> <button class="btn btn-danger btn-block" type="button" data-toggle="collapse" data-target="#' . $echoday . '-collapse-' . $echohour . '" aria-expanded="false">'
@@ -104,7 +102,8 @@ class calendar {
                     . '<div class="card card-body">'
                     . '<div class="btn-group-vertical btn-block" role="group" aria-label="Vertical button group">';
                     $allowed = FALSE;
-                }if  (in_array($tdstart, $allowedaysasnumbers)) {
+                    $formattedtime = "";
+                } elseif (in_array($tdstart, $allowedaysasnumbers)) {
                     echo'<td> <button class="btn btn-primary btn-block" type="button" data-toggle="collapse" data-target="#' . $echoday . '-collapse-' . $echohour . '" aria-expanded="false">'
                     . $echohour . ' - ' . $echohourto . '</button>'
                     . ' <div class="collapse" id="' . $echoday . '-collapse-' . $echohour . '">'
@@ -112,7 +111,7 @@ class calendar {
                     . '<div class="btn-group-vertical btn-block" role="group" aria-label="Vertical button group">';
                     $allowed = TRUE;
                 }
-                $this->EchoMinutes($echoday, $echohour, $intervals, $echodate, $thisdayreservations, $allowed);
+                $this->EchoMinutes($echoday, $echohour, $intervals, $echodate, $thisdayreservations, $allowed, $breaktimes);
                 echo "</div> </div> </div> </td>";
                 $tdstart = $tdstart + 1;
             }
@@ -121,7 +120,8 @@ class calendar {
         }
         echo'</tbody> </table> </div> </div>';
     }
-    private function EchoMinutes($echoday, $echohour, $intervals, $echodate, $thisdayreservations, $allowed) {
+
+    private function EchoMinutes($echoday, $echohour, $intervals, $echodate, $thisdayreservations, $allowed, $breaktimes) {
         $echominutes = '00';
         foreach ($thisdayreservations as $rows) {
 
@@ -131,11 +131,11 @@ class calendar {
             $reservabletime = $echohour . ':' . $echominutes;
             $reservabletime = new DateTime($reservabletime);
             $reservabletime = $reservabletime->format('H:i:s');
-            if (!in_array($reservabletime, $times, true) AND $allowed) {
+            if (!in_array($reservabletime, $times, true) AND $allowed AND !in_array($reservabletime, $breaktimes)) {
                 echo '<button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#ReserveTime" data-day="' . $echoday . '"data-date="' . $echodate . '" data-time-to-reserve="' . $echohour . ':' . $echominutes . '">' . $echominutes . '</button>';
-                } elseif (in_array ($reservabletime, $times) AND $allowed) {
+                } elseif (in_array ($reservabletime, $times) AND $allowed AND !in_array($reservabletime, $breaktimes)) {
                 echo '<button type="button" class="btn btn-danger btn-block" " title="Varattu""' . $echoday . '"data-date="' . $echodate . '" data-time-to-reserve="' . $echohour . ':' . $echominutes . '">' . $echominutes . '</button>';
-                } elseif(!$allowed) {
+                } elseif(!$allowed OR in_array($reservabletime, $breaktimes)) {
                     echo'<button type="button" class="btn btn-danger btn-block" " title="Ei varattavissa""' . $echoday . '"data-date="' . $echodate . '" data-time-to-reserve="' . $echohour . ':' . $echominutes . '">' . $echominutes . '</button>';
                 
             } else {
@@ -287,6 +287,25 @@ class calendar {
             return $options;
         } else {
             echo "Tietokantaan ei saatu yheyttä";
+        }
+    }
+
+    private function GenerateBreakTimes($breakstart, $breakend) {
+        if (!is_null($breakstart) AND ! is_null($breakend)) {
+
+            $date = new DateTime($breakstart);
+            $date->format('h:i:s') . "\n";
+            $formattedtime = "";
+            $breaktimes[] = $breakstart;
+            while ($formattedtime !== $breakend) {
+
+                $date->add(new DateInterval('PT15M'));
+                $formattedtime = $date->format('h:i:s');
+                $breaktimes[] = $formattedtime;
+            }
+            return $breaktimes;
+        } else {
+            echo "AAAA";
         }
     }
 
