@@ -35,7 +35,7 @@ class ProcessForms {
             if ($this->ValidateReserveTimeForm($_POST['ReserveOnDate'], $_POST['TimeToReserve'], $_POST['reserver-name'])) {
                 require_once("mysql.php");
                 $mysql = new mysql();
-                $this->SelectIdByName($_POST['PassCalendarName'], $mysql);
+                $this->id = $mysql->SelectIdByName($_POST['PassCalendarName']);
                 if ($mysql->IsDateAndTimeAvailable($this->id, $_POST['ReserveOnDate'], $_POST['TimeToReserve'])) {
                     $this->InsertToReservations($_POST['ReserveOnDate'], $_POST['TimeToReserve'], $_POST['reserver-name'], $mysql);
                     $echoalert = '<div class="alert alert-success" role="alert"> <strong> Aika on nyt varattu! </div>';
@@ -55,6 +55,11 @@ class ProcessForms {
                     $echoalert = '<div class="alert alert-danger" role="alert"> <strong> Aika jota olit varaamasa ylettyy jo varattuun aikaan. Ole hyvä ja valitse uusi aika. </div>';
                 }
             } echo $echoalert;
+        }
+        elseif (isset($_POST['delete_calendar'])) {
+            require_once("mysql.php");
+            $mysql = new mysql();
+            $this->DeleteCalendar($_POST['delete_calendar'], $mysql);
         }
     }
 
@@ -194,31 +199,20 @@ class ProcessForms {
         }
     }
     
-    private function SelectIdByName($name, $mysql) {
-        if ($mysql->connectDB()) {
 
-
-            if ($stmt = $mysql->db_connection->prepare('SELECT calendar_id FROM calendar_options WHERE calendar_name = ?')) {
-                $stmt->bind_param('s', $name);
-                if ($stmt->execute()) {
-                    $result= $stmt->get_result();
-                    $row = $result->fetch_row();
-                    $this->id = $row[0];
-
-                } else {
-                    print_r("ID ei haettu. " . htmlspecialchars($mysql->db_connection->error));
-                }
-            } else {
-                print_r('prepare() failed: ' . htmlspecialchars($mysql->db_connection->error));
-            }
-        } else {
-            echo "Tietokantaan ei saatu yhteyttä";
-        }
-    }
 
     private function ValidateReserveTimeForm($ReserveOnDate, $TimeToReserve, $ReserverName) {
         #ToDo
         return TRUE;
+    }
+    
+    private function DeleteCalendar($deletename, $mysql) {
+        $deleteid = $mysql->SelectIdByName($deletename);
+        $mysql->DeleteAllFromCalendarOptionsByID($deleteid);
+        $mysql->DeleteAllFromCalendarReservationsByID($deleteid);
+        $mysql->DeleteAllFromCalendarDatesByID($deleteid);
+        
+        echo '<div class="alert alert-success" role="alert">'.$deletename.' on poistettu! </div>';
     }
 
 }
