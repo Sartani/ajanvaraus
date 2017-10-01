@@ -36,14 +36,25 @@ class ProcessForms {
                 require_once("mysql.php");
                 $mysql = new mysql();
                 $this->SelectIdByName($_POST['PassCalendarName'], $mysql);
-                $this->InsertToReservations($_POST['ReserveOnDate'], $_POST['TimeToReserve'], $_POST['reserver-name'], $mysql);
-                if (isset($_POST['TimeToReserve2'])) {
+                if ($mysql->IsDateAndTimeAvailable($this->id, $_POST['ReserveOnDate'], $_POST['TimeToReserve'])) {
+                    $this->InsertToReservations($_POST['ReserveOnDate'], $_POST['TimeToReserve'], $_POST['reserver-name'], $mysql);
+                    $echoalert = '<div class="alert alert-success" role="alert"> <strong> Aika on nyt varattu! </div>';
+                } else {
+                    $echoalert = '<div class="alert alert-danger" role="alert"> <strong> Aika jota olit varaamassa on jo varattu. Ole hyvä ja valitse uusi aika. </div>';
+                }
+                if (isset($_POST['TimeToReserve2']) AND $mysql->IsDateAndTimeAvailable($this->id, $_POST['ReserveOnDate'], $_POST['TimeToReserve2'])) {
                     $this->InsertToReservations($_POST['ReserveOnDate'], $_POST['TimeToReserve2'], $_POST['reserver-name'], $mysql);
+                    $echoalert = '<div class="alert alert-success" role="alert"> <strong> Aika on nyt varattu! </div>';
+                } elseif (isset($_POST['TimeToReserve2'])) {
+                    $echoalert = '<div class="alert alert-danger" role="alert"> <strong> Aika jota olit varaamasa ylettyy jo varattuun aikaan. Ole hyvä ja valitse uusi aika. </div>';
                 }
-                if (isset($_POST['TimeToReserve3'])) {
+                if (isset($_POST['TimeToReserve3']) AND $mysql->IsDateAndTimeAvailable($this->id, $_POST['ReserveOnDate'], $_POST['TimeToReserve3'])) {
                     $this->InsertToReservations($_POST['ReserveOnDate'], $_POST['TimeToReserve3'], $_POST['reserver-name'], $mysql);
+                    $echoalert = '<div class="alert alert-success" role="alert"> <strong> Aika on nyt varattu! </div>';
+                } elseif (isset($_POST['TimeToReserve3'])) {
+                    $echoalert = '<div class="alert alert-danger" role="alert"> <strong> Aika jota olit varaamasa ylettyy jo varattuun aikaan. Ole hyvä ja valitse uusi aika. </div>';
                 }
-            }
+            } echo $echoalert;
         }
     }
 
@@ -172,7 +183,7 @@ class ProcessForms {
             if ($stmt = $mysql->db_connection->prepare('INSERT INTO calendar_reservations (calendar_id, reservation_date, reservation_time, reserver_name) VALUES (?, ?, ?,?)')) {
                 $stmt->bind_param('isss', $id, $ReserveOnDate, $TimeToReserve, $ReserverName);
                 if ($stmt->execute()) {
-                    echo "Tiedot syötetty";
+                    
                 } else {
                     print_r("Tietoja ei syötetty. " . htmlspecialchars($mysql->db_connection->error));}
             } else {

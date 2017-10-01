@@ -24,4 +24,20 @@ class mysql {
         }
         return $result;
     }
+    
+      public function IsDateAndTimeAvailable($id, $date, $time) {
+        if ($this->connectDB()) {
+            $stmt = $this->db_connection->prepare('SELECT reservation_date, reservation_time FROM calendar_reservations WHERE calendar_id = (?) AND reservation_date = (?) AND reservation_time=(?)');
+            $stmt->bind_param('sss', $id, $date, $time);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result->num_rows !== 1) {
+                return TRUE;
+            }
+            return FALSE;
+        } else {
+            echo "Tietokantaan ei saatu yheyttä";
+        }
+    }
+
 }
