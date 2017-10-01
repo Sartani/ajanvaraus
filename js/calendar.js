@@ -22,24 +22,11 @@ $('#ReserveTime').on('show.bs.modal', function (event) {
   modal.find('.modal-title').text('Varaa aika ' + day + 'na ' + localday + ' klo ' + aika);
   reservabletimelength();
 })
-$('#ReserveTime').on('hide.bs.modal', function (e) {
+$('#ReserveTime').on('hidden.bs.modal', function (e) {
   $('#alert-reserve-result').html('');
+    
 });
-function ReserveButtonConfirm() {
-    $(document).ready(function () {
-        document.getElementById("alert-reserve-success").style.display = 'block';
-        document.getElementById("reserve-button-confirm").disabled = true;
-        console.log("bah");
-    });
 
-}
-
-function ReserveButtonClose() {
-    $(document).ready(function () {
-        document.getElementById("reserve-button-confirm").disabled = false;
-        document.getElementById("alert-reserve-success").style.display = 'none';
-    });
-}
 
 $("#reserve-time-form").submit(function (event) {
     event.preventDefault();

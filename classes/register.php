@@ -3,7 +3,6 @@
 
 require_once("mysql.php");
 new register();
-print_r($_POST);
 
 /**
  * Class to handle registering users
@@ -15,12 +14,12 @@ class register {
     private $db_connection = null;
 
     public function __construct() {
-        echo "makkara";
+
         if (isset($_POST["user_email"])) {
-            $this->registerNewUser();
+            echo"Rekisteröinti ei tällä hetkellä ole käytössä";
         }
     }
-
+    
     private function registerNewUser() {
         $mysql = new mysql();
         

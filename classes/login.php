@@ -12,6 +12,9 @@ class login {
         }else{
            #do stuff
         }
+        if (isset($_POST['logout'])){
+            $this->Logout();
+        }
     }
      public function IsUserLogged(){
          session_start();
@@ -43,6 +46,12 @@ class login {
                 echo"Epäonnistui";
             }
         }
+    }
+    private function Logout(){
+        session_start();
+        session_unset();
+        session_destroy();
+        
     }
 
 }

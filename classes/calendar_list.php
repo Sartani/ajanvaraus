@@ -57,6 +57,7 @@ class calendar_list {
     }
 
     private function generate_calendar_list($logged, $mysql) {
+        echo"<h3>Valitse kalenteri </h3>";
 
         if ($logged) {
 

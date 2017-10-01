@@ -29,7 +29,7 @@ $("#login-form").submit(function (event) {
             NaytaKalenterit();
         }
         if(response==="Epäonnistui"){
-            alert("Väliaikainen kirjautuminen epäonnistui ilmoitus");
+            alert("Kirjautuminen epäonnistui, tarkista syöttämäsi tunnukset.");
         }
         
           console.log($form.attr('action'));

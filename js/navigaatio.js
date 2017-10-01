@@ -20,7 +20,7 @@ function NaytaKalenterit(){
 }
  function NaytaEtusivu(){
 
-    $("#main").load("views/index.php", function () {
+    $("#main").load("index.php", function () {
         //alert("Load was performed.");
     });
 }
@@ -34,6 +34,11 @@ function ShowCalendar(calendar){
 function ShowLuoKalenteri(){
     $("#main").load("views/luo_kalenteri.html", function () {
     });
+}
+
+function LogOut(){
+    $.post( "classes/login.php", { logout: "doit" } );
+    NaytaKalenterit();
 }
 var request;
 $("#register-form").submit(function (event) {
@@ -53,7 +58,7 @@ $("#register-form").submit(function (event) {
     });
     console.log("request: " + request);
     request.done(function (response, textStatus, jqXHR) {
-        
+        $('#register-success').text(response);
         document.getElementById('register-success').style.display = 'block';
         
           console.log($form.attr('action'));
