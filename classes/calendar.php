@@ -5,17 +5,16 @@
  *
  * @author Mikko
  */
-
-
+require_once("login.php");
 class calendar {
     private $reservable_days=[];
     private $daysconversion = array("Mon" => "maanantai", "Tue" => "tiistai",
             "Wed" => "keskiviikko", "Thu" => "torstai", "Fri" => "perjantai",
             "Sat" => "lauantai", "Sun" => "sunnuntai");
      public function __construct() {
-     
 
-     if (isset($_POST['calendar'])) {
+
+        if (isset($_POST['calendar'])) {
 
             require_once("mysql.php");
             $mysql = new mysql();
@@ -26,16 +25,17 @@ class calendar {
             } else {
                 $this->reservable_days = $this->SelectResevableDays($calendar, "", $mysql);
             }
-            $this->echoheader($calendaroptions['reservation_intervals']);
+            $login = new login();
+            if ($login->IsUserLogged()) {
+                $this->echoheader($calendaroptions['reservation_intervals'], $mysql, $calendar, TRUE);
+                $this->GenerateCalendar($calendaroptions['reservable_days'], '15', $calendaroptions['start_time'], $calendaroptions['end_time'], $_POST['calendar'], $mysql, $calendaroptions['break_start_time'], $calendaroptions['break_end_time']);
+            } else {
+                $this->echoheader($calendaroptions['reservation_intervals'], $mysql, $calendar, FALSE);
+                $this->GenerateCalendar($calendaroptions['reservable_days'], '15', $calendaroptions['start_time'], $calendaroptions['end_time'], $_POST['calendar'], $mysql, $calendaroptions['break_start_time'], $calendaroptions['break_end_time']);
+            }
         }
         if (!isset($_POST['calendar'])) {
             echo "Mikään kalenteri ei ollut valittuna, ole hyvä ja ota yhteyttä ylläpitoon";
-        }
-        if (isset($_SESSION['logged']) AND $_SESSION['logged'] == 'TRUE' and isset($_POST['create_calendar'])) {
-            $this->GenerateCalendar('7', '15', '8', '8', $_POST['calendar'], $mysql);
-            #Generoi kalenteri näkymä kirjautuneelle käyttäjälle
-        } elseif (!isset($_SESSION['logged]'])) {
-            $this->GenerateCalendar($calendaroptions['reservable_days'], '15', $calendaroptions['start_time'], $calendaroptions['end_time'], $_POST['calendar'], $mysql, $calendaroptions['break_start_time'], $calendaroptions['break_end_time']);
         }
     }
 
@@ -270,17 +270,22 @@ class calendar {
         }
     }
 
-    private function echoheader($ReservableTimeLength) {
+    private function echoheader($ReservableTimeLength, $mysql, $calendarname, $isuserlogged) {
         $smallestday = $this->reservable_days[0];
         $previousweekstart = $this->SubstractDate($smallestday[0], 7);
         $nextweekstart = $this->AddDate($smallestday[0], 7);
-        $largestday = $this->reservable_days[count($this->reservable_days) - 1];
+        $allreservabledays = $this->SelectResevableDays($calendarname, "", $mysql);
+        $largestday = $allreservabledays[count($allreservabledays) - 1];
+        $printview="";
+        if ($isuserlogged){
+              $printview ='<i id="printview" class="fa fa-print" aria-hidden="true"></i>';
+        }
         echo '<input type="hidden" id="ReservableTimeLength" value= "' . $ReservableTimeLength . '"></input>';
         echo'<head> <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" /></head>';
         echo'<div class="row">
-        <div class="col-sm-8"> <h3 id="CalendarName">' . $_POST['calendar'] . '</h3> <p>Varattavissa 15 min aikoja</p> </div>
+        <div class="col-sm-8"> <h3 id="CalendarName">' . $_POST['calendar'] . '</h3> <p>Varattavissa ' . $ReservableTimeLength . 'min aikoja</p> </div>
        
-        <div class="col-sm-4 text-right" ><i id="printview" class="fa fa-print" aria-hidden="true"></i></div>
+        <div class="col-sm-4 text-right" >'. $printview . '</div>
       </div>';
 
         echo '<input type="hidden" id="MaxDate" value ="' . $largestday[0] . '"></input>';

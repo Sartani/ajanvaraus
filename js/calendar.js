@@ -57,15 +57,6 @@ $("#reserve-time-form").submit(function (event) {
     console.log("request: " + request);
     request.done(function (response, textStatus, jqXHR) {
 
-        //document.getElementById('login-success').style.display = 'block';
-        if (response === "Onnistui") {
-
-            NaytaKalenterit();
-        }
-        if (response === "Epäonnistui") {
-            alert("Väliaikainen kirjautuminen epäonnistui ilmoitus");
-        }
-
         console.log($form.attr('action'));
         console.log("serializedData:" + serializedData);
         console.log("textstatus: " + textStatus);

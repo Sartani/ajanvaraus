@@ -18,7 +18,7 @@ and open the template in the editor.
 
   <div class="form-group">
     <label for="CalendarName">Kalenterin nimi</label>
-    <input type="text" class="form-control" id="CalendarName" name="CalendarName" placeholder="Kalenterin nimi">
+    <input type="text" class="form-control" id="CalendarName" name="CalendarName" placeholder="Kalenterin nimi"  maxlength="64" required>
     <small id="CalendarNameHelp" class="form-text text-muted">Maksimi pituus 64 merkkiä </small>
   </div>
   <div class="form-group">
@@ -91,12 +91,14 @@ and open the template in the editor.
                   </p>
               </div>
  
-    <div class="row">
+    <div id = "lastrow" class="row">
         <div class="col-sm-4"></div>
         <div class="col-sm-4"></div>
         <input type="hidden" name="create_calendar" value="create_calendar">
         <div class="col-sm-4"><button type="submit"  name="create_calendar" value="create_calendar" class="btn btn-primary">Luo kalenteri </button></div>
       </div>
+              <div id="CreateCalendarAlerts">
+              </div>
 
 </form></div>
          <script type="text/javascript" src="js/jquery.datepair.min.js"> </script>

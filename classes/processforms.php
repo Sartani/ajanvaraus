@@ -13,7 +13,6 @@ class ProcessForms {
 
     public function __construct() {
         if (isset($_POST['create_calendar'])) {
-            echo"banaanimaakari";
             $DateTimeRange = $_POST['DateTimeRange'];
             $days = $this->CombineReservableDays();
             $calendar_name = $_POST['CalendarName'];
@@ -55,10 +54,15 @@ class ProcessForms {
 //$end_time = $this->ExplodeString(4, $DateTimeRange);
         $start_date = $this->ExplodeString(0, $DateTimeRange);
         $end_date = $this->ExplodeString(1, $DateTimeRange);
-        $this->InsertToCalendarOptions($calendar_name, $days, $reservation_intervals, $start_date, $end_date, $start_time, $end_time, $break_start, $break_end, $mysql);
+        $insertocalendaroptions = $this->InsertToCalendarOptions($calendar_name, $days, $reservation_intervals, $start_date, $end_date, $start_time, $end_time, $break_start, $break_end, $mysql);
         $dates = $this->StartToEndDates($start_date, $end_date, 'dates');
         $weekdays = $this->StartToEndDates($start_date, $end_date, 'weekdays');
-        $this->InsertToCalendarDates($dates, $weekdays, $mysql);
+        $insertocalendardates = $this->InsertToCalendarDates($dates, $weekdays, $mysql);
+        if ($insertocalendardates AND $insertocalendaroptions) {
+            echo '<div class="alert alert-success" onclick="NaytaKalenterit()" role="alert"> <strong>Kalenteri luotiin onnistuneesti!</strong> Löydät sen kalenterit näkymästä.</div>';
+        } else {
+            echo '<div class="alert alert-danger" role="alert"> <strong> Jokin meni vikaan kalenteria luodessa. </strong> Tarkistathan syöttämästi asetukset. Jos ongelma jatkuu tästä huolimatta, ota yhteyttä ylläpitoon.</div>';
+        }
     }
 
     private function ValidateLuoKalenteriForm() {
@@ -77,14 +81,18 @@ class ProcessForms {
 
             if ($stmt = $mysql->db_connection->prepare('INSERT INTO calendar_options (start_date, end_date, start_time, end_time, break_start_time, break_end_time, reservable_days, calendar_name, reservation_intervals) VALUES (?,?,?,?,?,?,?,?,?)')) {
                 $stmt->bind_param('ssssssssi', $start_date, $end_date, $start_time,$end_time, $break_start, $break_end, $days, $calendar_name, $reservation_intervals);
-                $stmt->execute();
+                if ($stmt->execute()){
                 $this->id = $mysql->db_connection->insert_id;
                 print_r(htmlspecialchars($mysql->db_connection->error));
+                return TRUE;}
+                else{
+                print_r('execute() failed: ' . htmlspecialchars($mysql->db_connection->error));
+                }
             } else {
                 echo "Valintojen syöttö tietokantaan ei onnistunut, ole hyvä ja ota yhteyttä ylläpitoon";
                 print_r('prepare() failed: ' . htmlspecialchars($mysql->db_connection->error));
             }
-        }
+        } return FALSE;
     }
 
     private function InsertToCalendarDates($dates, $weekdays, $mysql) {
@@ -97,10 +105,13 @@ class ProcessForms {
                 $stmt = $mysql->db_connection->prepare('INSERT INTO calendar_dates (calendar_id, date, weekday) VALUES (?, ?, ?)');
                 $stmt->bind_param('iss',$id, $date, $weekday);
                 $stmt->execute();
+                return TRUE;
+                print_r(htmlspecialchars($mysql->db_connection->error));
             }
         }else {
-            echo "Päivien syötössä kalenteriin tapahtui virhe, ole hyvä ja ota yhteyttä ylläpitoon";
-        }
+            echo "Tietokantaan ei saatu yhteyttä, ole hyvä ja ota yhteyttä ylläpitoon ";
+            print_r(htmlspecialchars($mysql->db_connection->error));
+        } return FALSE;
     }
 
     private function StartToEndDates($start_date, $end_date, $option) {
@@ -115,14 +126,12 @@ class ProcessForms {
             foreach ($daterange as $date) {
                 //echo $date->format("Y-m-d D") . "<br>";
                 $dates[] = $date->format("Y-m-d");
-                echo $dates[$test];
                 $test = $test + 1;
             }
             return $dates;
         } elseif ($option == 'weekdays') {
             foreach ($daterange as $date) {
                 $weekdays[] = $date->format("D");
-                echo $weekdays[$test];
                 $test = $test + 1;
             }
             return $weekdays;
@@ -152,7 +161,7 @@ class ProcessForms {
             $ReserVableDays = $ReserVableDays . $_POST['AvailableDaysCheckboxsu'];
         }
         
-        echo $ReserVableDays;
+
         return $ReserVableDays;
     }
 
@@ -162,9 +171,10 @@ class ProcessForms {
             $id = $this->id;
             if ($stmt = $mysql->db_connection->prepare('INSERT INTO calendar_reservations (calendar_id, reservation_date, reservation_time, reserver_name) VALUES (?, ?, ?,?)')) {
                 $stmt->bind_param('isss', $id, $ReserveOnDate, $TimeToReserve, $ReserverName);
-                if($stmt->execute()){
-                echo "Tiedot syötetty";}else{
-                print_r("Tietoja ei syötetty. " . htmlspecialchars($mysql->db_connection->error));}
+                if ($stmt->execute()) {
+                    echo "Tiedot syötetty";
+                } else {
+                    print_r("Tietoja ei syötetty. " . htmlspecialchars($mysql->db_connection->error));}
             } else {
                 print_r('prepare() failed: ' . htmlspecialchars($mysql->db_connection->error));
             }

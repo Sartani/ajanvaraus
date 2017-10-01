@@ -15,10 +15,8 @@ class calendar_list {
         $login = new login();
         if ($login->IsUserLogged()) {
             $this->generate_calendar_list(TRUE);
-            echo "kala on hyvää";
         } else {
             $this->generate_calendar_list(FALSE);
-            echo "kala on pahaa";
         }
     }
 
